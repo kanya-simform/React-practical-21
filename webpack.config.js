@@ -2,13 +2,20 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
+  entry: {
+    bundle: path.resolve(__dirname, "src/main.tsx"),
+  },
   output: {
     path: path.join(__dirname, "/dist"), // the bundle output path
     filename: "bundle.js", // the name of the bundle
+    clean: true,
+  },
+  resolve: {
+    extensions: [".tsx", ".js", ".ts", ".jsx"],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "src/index.html", // to import index.html file inside index.js
+      template: "./index.html", // to import index.html file inside index.js
     }),
   ],
   devServer: {
@@ -21,6 +28,16 @@ module.exports = {
         exclude: /node_modules/, // excluding the node_modules folder
         use: {
           loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env", "@babel/preset-react"],
+          },
+        },
+      },
+      {
+        test: /\.(ts|tsx)$/, // .js and .jsx files
+        exclude: /node_modules/, // excluding the node_modules folder
+        use: {
+          loader: "ts-loader",
         },
       },
       {
